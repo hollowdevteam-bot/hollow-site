@@ -201,7 +201,20 @@
 
   <footer class="page-footer">
     <span>HOLLOW &copy; <span id="year"></span> &mdash; transmission ends</span>
+    <button class="credits-trigger" id="credits-open">[ CREDITS ]</button>
   </footer>
+</div>
+
+<!-- ============ CREDITS MODAL ============ -->
+<div id="credits-modal" class="modal-backdrop hidden">
+  <div class="modal-window">
+    <div class="window-titlebar">
+      <span class="window-caret">&#9660;</span>
+      <span class="window-title">CREDITS.exe</span>
+      <button class="modal-close" id="credits-close">&#10005;</button>
+    </div>
+    <div class="modal-body" id="credits-body"></div>
+  </div>
 </div>
 
 <script src="script.js"></script>

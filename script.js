@@ -79,7 +79,16 @@ const DEVLOG_DATA = [
   }
 ];
 
-/* Support links — replace the '#' placeholders with your real URLs */
+/* Credits — shown in the CREDITS window at the bottom of the page */
+const CREDITS_DATA = [
+  { role: "Music", name: "Mokonzi" },
+  { role: "Support", name: "Liumens Studio" },
+  { role: "Writing", name: "Mokonzi and Viper" },
+  { role: "Scripting", name: "Viper" },
+  { role: "3D Models", name: "Viper" },
+  { role: "Mapping", name: "Viper" }
+];
+const CREDITS_NOTE = "Voice actors will be shown here once every role has been cast.";
 const SUPPORT_LINKS = {
   kofi: "#",       // e.g. "https://ko-fi.com/yourname"
   discord: "https://discord.gg/fpgtWWqRUB",   // community Discord — NOT the voice casting one
@@ -258,6 +267,38 @@ function applySupportLinks() {
   document.getElementById("support-mail").href = "mailto:" + SUPPORT_LINKS.mail;
 }
 
+function renderCredits() {
+  const body = document.getElementById("credits-body");
+  CREDITS_DATA.forEach((c) => {
+    const row = document.createElement("div");
+    row.className = "credit-row";
+    row.innerHTML = `<span class="credit-role">${c.role}</span><span class="credit-name">${c.name}</span>`;
+    body.appendChild(row);
+  });
+  const note = document.createElement("div");
+  note.className = "credit-note";
+  note.textContent = CREDITS_NOTE;
+  body.appendChild(note);
+}
+
+function setupCreditsModal() {
+  const modal = document.getElementById("credits-modal");
+  const openBtn = document.getElementById("credits-open");
+  const closeBtn = document.getElementById("credits-close");
+
+  const open = () => modal.classList.remove("hidden");
+  const close = () => modal.classList.add("hidden");
+
+  openBtn.addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
+}
+
 function populateRoleSelect() {
   const select = document.getElementById("up-role");
   ROLE_DATA.forEach((role) => {
@@ -363,6 +404,8 @@ document.addEventListener("DOMContentLoaded", () => {
   applySupportLinks();
   populateRoleSelect();
   setupUploadForm();
+  renderCredits();
+  setupCreditsModal();
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
