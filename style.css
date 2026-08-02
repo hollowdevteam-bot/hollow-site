@@ -584,11 +584,25 @@ p, li { font-size: 13.5px; line-height: 1.7; color: var(--fg); }
   font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--fg-dim);
-  background: none;
+  background: transparent;
   border: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+  padding: 4px 8px;
   cursor: pointer;
 }
 .credits-trigger:hover { color: var(--cyan); }
+
+.nav-btn-credits {
+  border-color: #1f3a4a;
+  color: var(--cyan);
+}
+.nav-btn-credits:hover {
+  border-color: var(--cyan);
+  color: #bff7f7;
+}
 
 /* Credits modal */
 .modal-backdrop {

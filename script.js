@@ -409,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  document.querySelectorAll(".nav-btn").forEach((btn) => {
+  document.querySelectorAll(".nav-btn[data-target]").forEach((btn) => {
     btn.addEventListener("click", () => switchPane(btn.dataset.target));
   });
 
