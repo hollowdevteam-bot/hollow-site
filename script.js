@@ -172,6 +172,7 @@ let transitioning = false;
 
 async function switchPane(target) {
   if (transitioning) return;
+  if (!target || !SECTION_FILES[target]) return;
   transitioning = true;
 
   const overlay = document.getElementById("transition-screen");
