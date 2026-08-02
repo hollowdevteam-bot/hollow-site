@@ -165,7 +165,6 @@ const SECTION_FILES = {
   auditions: { file: "casting.dat",    size: "21 KB" },
   devblog:   { file: "devblog.dat",    size: "34 KB" },
   support:   { file: "supply.dat",     size: "6 KB"  },
-  credits:   { file: "roster.dat",     size: "3 KB"  },
   hollowz:   { file: "hollowz.dat",    size: "0 KB"  }
 };
 
