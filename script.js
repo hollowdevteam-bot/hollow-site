@@ -149,6 +149,16 @@ async function runBoot() {
 
 /* ---- 3. SECTION TRANSITION (short flicker when switching tabs) -------- */
 
+/* Section registry used to fake a directory scan on transition */
+const SECTION_FILES = {
+  home:      { file: "home.dat",       size: "12 KB" },
+  questions: { file: "questions.dat",  size: "8 KB"  },
+  auditions: { file: "casting.dat",    size: "21 KB" },
+  devblog:   { file: "devblog.dat",    size: "34 KB" },
+  support:   { file: "supply.dat",     size: "6 KB"  },
+  hollowz:   { file: "hollowz.dat",    size: "0 KB"  }
+};
+
 let transitioning = false;
 
 async function switchPane(target) {
@@ -160,13 +170,35 @@ async function switchPane(target) {
   log.innerHTML = "";
   overlay.classList.add("on");
 
-  await typeLine(log, `> ACCESSING FILE: ${target.toUpperCase()}.DAT`, "ok", 10);
-  await new Promise((r) => setTimeout(r, 180));
+  const meta = SECTION_FILES[target] || { file: target + ".dat", size: "-- KB" };
+
+  await typeLine(log, `> ACCESSING SECTOR: ${target.toUpperCase()}`, "ok", 4);
+  await typeLine(log, `> SCANNING C:\\HOLLOW\\SECTORS\\`, "ok", 3);
+  await new Promise((r) => setTimeout(r, 60));
+
+  const listDiv = document.createElement("div");
+  listDiv.className = "dir-list";
+  log.appendChild(listDiv);
+
+  for (const [key, info] of Object.entries(SECTION_FILES)) {
+    const row = document.createElement("div");
+    row.className = key === target ? "dir-row hit" : "dir-row";
+    row.textContent = `  ${info.size.padStart(6, " ")}   ${info.file}`;
+    listDiv.appendChild(row);
+    await new Promise((r) => setTimeout(r, 22));
+  }
+
+  await new Promise((r) => setTimeout(r, 80));
+  await typeLine(log, `> TARGET LOCKED: ${meta.file}`, "tag", 4);
+  await typeLine(log, `> DECRYPTING...`, "ok", 3);
+  await new Promise((r) => setTimeout(r, 120));
+  await typeLine(log, `> ACCESS GRANTED`, "tag", 3);
+  await new Promise((r) => setTimeout(r, 140));
 
   document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("active", p.id === target));
   document.querySelectorAll(".nav-btn").forEach((b) => b.classList.toggle("active", b.dataset.target === target));
 
-  await new Promise((r) => setTimeout(r, 120));
+  await new Promise((r) => setTimeout(r, 100));
   overlay.classList.remove("on");
   transitioning = false;
 }

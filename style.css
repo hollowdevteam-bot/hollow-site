@@ -124,6 +124,18 @@ html, body {
 .boot-log .warn { color: #e8c96a; }
 .boot-log .tag { color: var(--red); text-shadow: 0 0 6px rgba(200,40,30,0.5); }
 
+.dir-list {
+  margin: 4px 0 8px 12px;
+  font-size: 12px;
+  color: #5f8f5f;
+}
+.dir-row { white-space: pre; opacity: 0.75; }
+.dir-row.hit {
+  color: #d9f2b9;
+  opacity: 1;
+  text-shadow: 0 0 6px rgba(180,255,120,0.35);
+}
+
 .boot-bar-row {
   display: flex;
   align-items: center;
@@ -556,6 +568,46 @@ p, li { font-size: 13.5px; line-height: 1.7; color: var(--fg); }
   font-size: 11px;
   margin-top: 30px;
   letter-spacing: 0.05em;
+}
+
+/* HOLLOWZ — classified / zombie-adjacent styling, kept in the same system */
+.nav-btn-alt {
+  border-color: #2a3a24;
+  color: #9fd07a;
+}
+.nav-btn-alt:hover {
+  border-color: #6fae3f;
+  color: #c9f0a8;
+}
+.nav-btn-alt.active {
+  background: #4c7a2c;
+  border-color: #4c7a2c;
+  color: #0a0a0a;
+}
+
+.pane-label.alt { color: #7fbf4a; }
+.pane-title.alt { color: #d9e9c9; }
+
+.empty-state {
+  border: 1px dashed #2a3a24;
+  background: #0c0f0a;
+  padding: 60px 20px;
+  text-align: center;
+  margin-top: 10px;
+}
+.empty-state-line {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: #6d7169;
+}
+.empty-state-sub {
+  font-size: 12px;
+  color: #4c7a2c;
+  margin-top: 10px;
+  letter-spacing: 0.08em;
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
 }
 
 /* ---------------------------------------------------------------------- */
