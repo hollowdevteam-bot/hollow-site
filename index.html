@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOLLOW // dev transmission</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Text:wght@700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ BOOT / BRIEFING SCREEN ============ -->
+<div id="boot-screen">
+  <div class="scanlines"></div>
+  <div class="boot-inner">
+    <pre id="boot-log" class="boot-log"></pre>
+    <div class="boot-bar-row">
+      <span id="boot-bar" class="boot-bar"></span>
+      <span id="boot-pct" class="boot-pct">0%</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION TRANSITION FLASH ============ -->
+<div id="transition-screen">
+  <div class="scanlines"></div>
+  <pre id="transition-log" class="boot-log"></pre>
+</div>
+
+<!-- ============ MAIN APP ============ -->
+<div id="app" class="hidden">
+  <div class="crt-overlay"></div>
+  <div class="scanlines static"></div>
+  <div class="vignette"></div>
+
+  <header class="topbar">
+    <div class="logo-wrap">
+      <span class="glitch-text" data-text="HOLLOW">HOLLOW</span>
+    </div>
+    <div class="topbar-sub">// war dispatch &mdash; unauthorized viewing is not a crime here, everything is public</div>
+  </header>
+
+  <div class="window">
+    <div class="window-titlebar">
+      <span class="window-caret">&#9660;</span>
+      <span class="window-title">HOLLOW.exe &mdash; command console</span>
+      <span class="window-status" id="clock-status">STANDBY</span>
+    </div>
+
+    <nav class="window-nav">
+      <button class="nav-btn active" data-target="home">HOME</button>
+      <button class="nav-btn" data-target="questions">QUESTIONS</button>
+      <button class="nav-btn" data-target="auditions">VOICE CASTING</button>
+      <button class="nav-btn" data-target="devblog">DEVBLOG</button>
+      <button class="nav-btn" data-target="support">SUPPORT</button>
+    </nav>
+
+    <main class="window-body">
+
+      <!-- HOME -->
+      <section class="pane active" id="home">
+        <div class="pane-label">SECTOR // 00 &mdash; BRIEFING</div>
+        <h1 class="pane-title">Welcome to HOLLOW.</h1>
+        <p class="lead">
+          HOLLOW is a war game about the space between orders and consequences.
+          No two positions hold forever. No radio stays quiet for long.
+        </p>
+
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-k">STATUS</div>
+            <div class="stat-v">IN DEVELOPMENT</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-k">PLATFORM</div>
+            <div class="stat-v">ROBLOX</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-k">ENGINE</div>
+            <div class="stat-v">SPH / SPEARHEAD</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-k">SIGNAL</div>
+            <div class="stat-v blink">ACTIVE</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p>
+          Use the console above to move between briefing files. Questions not answered below
+          can be sent through the SUPPORT / CONTACT channel.
+        </p>
+      </section>
+
+      <!-- QUESTIONS -->
+      <section class="pane" id="questions">
+        <div class="pane-label">SECTOR // 01 &mdash; DEBRIEF</div>
+        <h1 class="pane-title">Questions.</h1>
+        <p class="lead">Frequently asked. Answered once, filed here so we don't repeat ourselves on the radio.</p>
+
+        <div class="faq-list" id="faq-list"></div>
+      </section>
+
+      <!-- AUDITIONS -->
+      <section class="pane" id="auditions">
+        <div class="pane-label">SECTOR // 02 &mdash; PERSONNEL</div>
+        <h1 class="pane-title">Voice Casting.</h1>
+        <p class="lead">
+          We're recruiting voices for HOLLOW. No experience required &mdash; we care about performance,
+          not your equipment. Read the roles below, then follow the submission steps.
+        </p>
+
+        <div class="role-list" id="role-list"></div>
+
+        <div class="divider"></div>
+
+        <h2 class="sub-title">Submit your take</h2>
+        <p class="note" style="margin-bottom:16px;">Record 30&ndash;60 seconds on the sample line for the role you're going for, then upload it directly below. It's sent straight to our casting channel.</p>
+
+        <form class="upload-box" id="upload-form">
+          <div class="upload-row">
+            <label for="up-name">NAME / DISCORD TAG</label>
+            <input type="text" id="up-name" name="name" placeholder="e.g. shibe#0001" required>
+          </div>
+          <div class="upload-row">
+            <label for="up-role">ROLE</label>
+            <select id="up-role" name="role" required></select>
+          </div>
+          <div class="upload-row">
+            <label>AUDIO FILE (.mp3 / .wav)</label>
+            <div class="file-drop" id="file-drop">
+              <input type="file" id="up-file" name="file" accept=".mp3,.wav,audio/mpeg,audio/wav,audio/x-wav" required>
+              <div class="file-drop-label" id="file-drop-label">drop file here, or <span class="hi">click to browse</span></div>
+            </div>
+          </div>
+          <button type="submit" class="upload-submit" id="upload-submit">TRANSMIT SAMPLE</button>
+          <div class="upload-status" id="upload-status"></div>
+          <div class="upload-note">Max file size depends on the Discord server's upload limit (usually 10&ndash;25&nbsp;MB). Compress large .wav files to .mp3 if needed.</div>
+        </form>
+      </section>
+
+      <!-- DEVBLOG -->
+      <section class="pane" id="devblog">
+        <div class="pane-label">SECTOR // 03 &mdash; FIELD LOG</div>
+        <h1 class="pane-title">Devblog.</h1>
+        <p class="lead">Dispatches from development. Newest entries first.</p>
+
+        <div class="devlog-list" id="devlog-list"></div>
+      </section>
+
+      <!-- SUPPORT -->
+      <section class="pane" id="support">
+        <div class="pane-label">SECTOR // 04 &mdash; SUPPLY LINES</div>
+        <h1 class="pane-title">Support.</h1>
+        <p class="lead">
+          HOLLOW is built in spare hours, funded out of pocket. If you want to help keep the lights on,
+          here's where that goes.
+        </p>
+
+        <div class="support-grid">
+          <a class="support-card" href="#" id="support-kofi" target="_blank" rel="noopener">
+            <div class="support-k">ONE-TIME</div>
+            <div class="support-v">Ko-fi</div>
+            <div class="support-d">Buy a coffee, no strings.</div>
+          </a>
+          <a class="support-card" href="#" id="support-discord" target="_blank" rel="noopener">
+            <div class="support-k">COMMUNITY</div>
+            <div class="support-v">Discord</div>
+            <div class="support-d">Talk to the team, follow live updates.</div>
+          </a>
+          <a class="support-card" href="mailto:contact@example.com" id="support-mail">
+            <div class="support-k">DIRECT</div>
+            <div class="support-v">Contact</div>
+            <div class="support-d">Questions, press, everything else.</div>
+          </a>
+        </div>
+
+        <div class="divider"></div>
+        <p class="note">
+          HOLLOW does not sell gameplay advantages. Support funds development time only.
+        </p>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="page-footer">
+    <span>HOLLOW &copy; <span id="year"></span> &mdash; transmission ends</span>
+  </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
