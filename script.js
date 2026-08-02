@@ -90,7 +90,7 @@ const CREDITS_DATA = [
 ];
 const CREDITS_NOTE = "Voice actors will be shown here once every role has been cast.";
 const SUPPORT_LINKS = {
-  kofi: "#",       // e.g. "https://ko-fi.com/yourname"
+  kofi: "https://ko-fi.com/hollowdevteam",
   discord: "https://discord.gg/fpgtWWqRUB",   // community Discord — NOT the voice casting one
   mail: "hollowdevteam@gmail.com"
 };
