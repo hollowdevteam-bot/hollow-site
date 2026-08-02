@@ -107,10 +107,20 @@ const BOOT_LINES = [
   { text: "> AUTHENTICATING CLEARANCE LEVEL...", cls: "ok" },
   { text: "> CLEARANCE GRANTED", cls: "tag" },
   { text: "> LOADING SECTOR DATA [HOLLOW]...", cls: "ok" },
-  { text: "> COMPILING FIELD REPORTS...", cls: "ok" },
+  { text: "> VERIFYING TRANSMISSION INTEGRITY...", cls: "ok" },
+  { text: "> SYNCING FIELD REPORTS...", cls: "ok" },
+  { text: "> COMPILING SECTOR MANIFEST...", cls: "ok" },
+  { text: "> CROSS-REFERENCING PERSONNEL FILES...", cls: "ok" },
   { text: "> WARNING: SIGNAL INTEGRITY 94%", cls: "warn" },
+  { text: "> RE-ROUTING THROUGH BACKUP RELAY...", cls: "ok" },
+  { text: "> CALIBRATING DISPLAY...", cls: "ok" },
   { text: "> STANDBY FOR BRIEFING", cls: "tag" }
 ];
+
+/* Fixed time budgets so adding/removing lines never changes how long boot takes */
+const BOOT_TYPE_BUDGET_MS = 1030;   // total time spent "typing" all lines combined
+const BOOT_PAUSE_BUDGET_MS = 245;   // total time spent pausing between lines combined
+const BOOT_FINAL_PAUSE_MS = 150;
 
 function typeLine(container, text, cls, speed = 5) {
   return new Promise((resolve) => {
@@ -137,16 +147,20 @@ async function runBoot() {
   const pct = document.getElementById("boot-pct");
   const barWidth = 34;
 
+  const totalChars = BOOT_LINES.reduce((sum, l) => sum + l.text.length, 0);
+  const charSpeed = Math.max(1, BOOT_TYPE_BUDGET_MS / totalChars);
+  const linePause = BOOT_PAUSE_BUDGET_MS / BOOT_LINES.length;
+
   for (let i = 0; i < BOOT_LINES.length; i++) {
-    await typeLine(log, BOOT_LINES[i].text, BOOT_LINES[i].cls);
+    await typeLine(log, BOOT_LINES[i].text, BOOT_LINES[i].cls, charSpeed);
     const percent = Math.round(((i + 1) / BOOT_LINES.length) * 100);
     const filled = Math.round((percent / 100) * barWidth);
     bar.textContent = "[" + "#".repeat(filled) + "-".repeat(barWidth - filled) + "]";
     pct.textContent = percent + "%";
-    await new Promise((r) => setTimeout(r, 35));
+    await new Promise((r) => setTimeout(r, linePause));
   }
 
-  await new Promise((r) => setTimeout(r, 150));
+  await new Promise((r) => setTimeout(r, BOOT_FINAL_PAUSE_MS));
 
   const boot = document.getElementById("boot-screen");
   boot.style.opacity = "0";
@@ -171,6 +185,24 @@ const SECTION_FILES = {
 
 let transitioning = false;
 
+/* Fixed time budgets so adding more scan lines never changes how long a transition takes */
+const TR_HEAD_BUDGET_MS = 200;
+const TR_LIST_BUDGET_MS = 160;
+const TR_TAIL_BUDGET_MS = 200;
+const TR_PAUSE_AFTER_HEAD = 60;
+const TR_PAUSE_AFTER_LIST = 80;
+const TR_PAUSE_MID_TAIL = 90;
+const TR_PAUSE_AFTER_TAIL = 140;
+const TR_PAUSE_AFTER_TOGGLE = 100;
+
+async function typeGroup(log, lines, budgetMs) {
+  const totalChars = lines.reduce((sum, l) => sum + l.text.length, 0);
+  const speed = Math.max(1, budgetMs / totalChars);
+  for (const l of lines) {
+    await typeLine(log, l.text, l.cls, speed);
+  }
+}
+
 async function switchPane(target) {
   if (transitioning) return;
   if (!target || !SECTION_FILES[target]) return;
@@ -181,35 +213,45 @@ async function switchPane(target) {
   log.innerHTML = "";
   overlay.classList.add("on");
 
-  const meta = SECTION_FILES[target] || { file: target + ".dat", size: "-- KB" };
+  const meta = SECTION_FILES[target];
 
-  await typeLine(log, `> ACCESSING SECTOR: ${target.toUpperCase()}`, "ok", 4);
-  await typeLine(log, `> SCANNING C:\\HOLLOW\\SECTORS\\`, "ok", 3);
-  await new Promise((r) => setTimeout(r, 60));
+  await typeGroup(log, [
+    { text: `> ACCESSING SECTOR: ${target.toUpperCase()}`, cls: "ok" },
+    { text: `> SCANNING C:\\HOLLOW\\SECTORS\\`, cls: "ok" },
+    { text: `> INDEXING METADATA...`, cls: "ok" }
+  ], TR_HEAD_BUDGET_MS);
+  await new Promise((r) => setTimeout(r, TR_PAUSE_AFTER_HEAD));
 
   const listDiv = document.createElement("div");
   listDiv.className = "dir-list";
   log.appendChild(listDiv);
 
-  for (const [key, info] of Object.entries(SECTION_FILES)) {
+  const entries = Object.entries(SECTION_FILES);
+  const rowDelay = TR_LIST_BUDGET_MS / entries.length;
+  for (const [key, info] of entries) {
     const row = document.createElement("div");
     row.className = key === target ? "dir-row hit" : "dir-row";
     row.textContent = `  ${info.size.padStart(6, " ")}   ${info.file}`;
     listDiv.appendChild(row);
-    await new Promise((r) => setTimeout(r, 22));
+    await new Promise((r) => setTimeout(r, rowDelay));
   }
+  await new Promise((r) => setTimeout(r, TR_PAUSE_AFTER_LIST));
 
-  await new Promise((r) => setTimeout(r, 80));
-  await typeLine(log, `> TARGET LOCKED: ${meta.file}`, "tag", 4);
-  await typeLine(log, `> DECRYPTING...`, "ok", 3);
-  await new Promise((r) => setTimeout(r, 120));
-  await typeLine(log, `> ACCESS GRANTED`, "tag", 3);
-  await new Promise((r) => setTimeout(r, 140));
+  await typeGroup(log, [
+    { text: `> TARGET LOCKED: ${meta.file}`, cls: "tag" },
+    { text: `> DECRYPTING PAYLOAD...`, cls: "ok" },
+    { text: `> VALIDATING SIGNATURE...`, cls: "ok" }
+  ], TR_TAIL_BUDGET_MS * 0.7);
+  await new Promise((r) => setTimeout(r, TR_PAUSE_MID_TAIL));
+  await typeGroup(log, [
+    { text: `> ACCESS GRANTED`, cls: "tag" }
+  ], TR_TAIL_BUDGET_MS * 0.3);
+  await new Promise((r) => setTimeout(r, TR_PAUSE_AFTER_TAIL));
 
   document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("active", p.id === target));
   document.querySelectorAll(".nav-btn").forEach((b) => b.classList.toggle("active", b.dataset.target === target));
 
-  await new Promise((r) => setTimeout(r, 100));
+  await new Promise((r) => setTimeout(r, TR_PAUSE_AFTER_TOGGLE));
   overlay.classList.remove("on");
   transitioning = false;
 }
