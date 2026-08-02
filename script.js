@@ -165,6 +165,7 @@ const SECTION_FILES = {
   auditions: { file: "casting.dat",    size: "21 KB" },
   devblog:   { file: "devblog.dat",    size: "34 KB" },
   support:   { file: "supply.dat",     size: "6 KB"  },
+  credits:   { file: "roster.dat",     size: "3 KB"  },
   hollowz:   { file: "hollowz.dat",    size: "0 KB"  }
 };
 
@@ -269,35 +270,17 @@ function applySupportLinks() {
 }
 
 function renderCredits() {
-  const body = document.getElementById("credits-body");
+  const list = document.getElementById("credit-list");
   CREDITS_DATA.forEach((c) => {
     const row = document.createElement("div");
     row.className = "credit-row";
     row.innerHTML = `<span class="credit-role">${c.role}</span><span class="credit-name">${c.name}</span>`;
-    body.appendChild(row);
+    list.appendChild(row);
   });
   const note = document.createElement("div");
   note.className = "credit-note";
   note.textContent = CREDITS_NOTE;
-  body.appendChild(note);
-}
-
-function setupCreditsModal() {
-  const modal = document.getElementById("credits-modal");
-  const openBtn = document.getElementById("credits-open");
-  const closeBtn = document.getElementById("credits-close");
-
-  const open = () => modal.classList.remove("hidden");
-  const close = () => modal.classList.add("hidden");
-
-  openBtn.addEventListener("click", open);
-  closeBtn.addEventListener("click", close);
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) close();
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") close();
-  });
+  list.appendChild(note);
 }
 
 function populateRoleSelect() {
@@ -406,7 +389,6 @@ document.addEventListener("DOMContentLoaded", () => {
   populateRoleSelect();
   setupUploadForm();
   renderCredits();
-  setupCreditsModal();
 
   document.getElementById("year").textContent = new Date().getFullYear();
 

@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Text:wght@700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -55,7 +55,7 @@
       <button class="nav-btn" data-target="auditions">VOICE CASTING</button>
       <button class="nav-btn" data-target="devblog">DEVBLOG</button>
       <button class="nav-btn" data-target="support">SUPPORT</button>
-      <button class="nav-btn nav-btn-credits" id="credits-open" type="button">CREDITS</button>
+      <button class="nav-btn nav-btn-credits" data-target="credits">CREDITS</button>
       <button class="nav-btn nav-btn-alt" data-target="hollowz">HOLLOWZ</button>
     </nav>
 
@@ -186,8 +186,18 @@
         </p>
       </section>
 
+      <!-- CREDITS -->
+      <section class="pane" id="credits">
+        <div class="pane-label">SECTOR // 05 &mdash; ROSTER</div>
+        <h1 class="pane-title">Credits.</h1>
+        <p class="lead">Everyone behind HOLLOW so far.</p>
+
+        <div class="credit-list" id="credit-list"></div>
+      </section>
+
+      <!-- HOLLOWZ -->
       <section class="pane" id="hollowz">
-        <div class="pane-label alt">SECTOR // 05 &mdash; CLASSIFIED</div>
+        <div class="pane-label alt">SECTOR // 06 &mdash; CLASSIFIED</div>
         <h1 class="pane-title alt">Hollowz.</h1>
         <p class="lead">A separate mode. Details are being kept off the record for now.</p>
 
@@ -205,18 +215,6 @@
   </footer>
 </div>
 
-<!-- ============ CREDITS MODAL ============ -->
-<div id="credits-modal" class="modal-backdrop hidden">
-  <div class="modal-window">
-    <div class="window-titlebar">
-      <span class="window-caret">&#9660;</span>
-      <span class="window-title">CREDITS.exe</span>
-      <button class="modal-close" id="credits-close">&#10005;</button>
-    </div>
-    <div class="modal-body" id="credits-body"></div>
-  </div>
-</div>
-
-<script src="script.js?v=3"></script>
+<script src="script.js?v=4"></script>
 </body>
 </html>
